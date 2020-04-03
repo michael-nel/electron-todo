@@ -2,7 +2,8 @@ const electron = require('electron');
 const {
   app,
   BrowserWindow,
-  Menu
+  Menu,
+  ipcMain
 } = electron;
 
 let mainWindow;
@@ -22,12 +23,22 @@ app.on('ready', () => {
 
 function createAddWindow(){
   addWindow = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true
+    },
     width: 300,
     height: 200,
     title: 'Add New Todo'
   });
   addWindow.loadURL(`file://${__dirname}/add.html`);
+    //Garbage
+  addWindow.on('closed', () => addWindow = null);
 }
+
+ipcMain.on('todo:add', (event, todo) => {
+  mainWindow.webContents.send('todo:add', todo);
+  addWindow.close();
+})
 
 const menuTemplate = [{
   label: 'File',

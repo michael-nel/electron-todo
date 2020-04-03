@@ -9,8 +9,16 @@
     </form>
 
     <script>
-        document.querySelector('form').AddEventListener('submit', (event) =>{
+      const electron = require('electron');
+      const { ipcRenderer } = electron;
+
+        document.querySelector('form').addEventListener('submit', (event) =>{
           event.preventDefault();
+
+          document.querySelector('input').value;
+
+          const { value } = document.querySelector('input');
+          ipcRenderer.send('todo:add', value);
 
           debugger;
         });
